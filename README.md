@@ -55,7 +55,7 @@ root
 | vro_workflow_id      | Workflow ID to execute         | stored in defaults var      |  
 | vro_server_user      | User account for REST API      | stored in defaults var      | 
 | vro_server_pwd       | Password for the same account  | stored in defaults var      |  
-| wf_yourName          | Workflow input-parameter       | runtime input as extra-vars | 
+| yourName          | Workflow input-parameter       | runtime input as extra-vars | 
 
 
 The workflow I'm using has only one input-parameter called `yourName` and to differenciate it I'm using a local variable as `wf_yourName`
