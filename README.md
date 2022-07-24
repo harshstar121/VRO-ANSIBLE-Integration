@@ -48,7 +48,7 @@ root
 * tasks/execute-workflow.yml - contains the logic to execute the workflow and check the status.
 * templates/workflow-input.json - workflow input in json format for REST call.
 
-##### Inputs #####
+### Inputs ###
 | Variable Name        | Description                    | Defaults                    |
 |----------------------|--------------------------------|-----------------------------|
 | vro_server_url       | Provide the FQDN of VRO        | stored in defaults var      |
@@ -62,7 +62,6 @@ The workflow I'm using has only one input-parameter called `yourName` and to dif
 which is also part of templates/workflow-inputs.json (json payload for REST API)
 
 `NOTE: Need to create as many inputs as the VRO workflow contains.`
-
 
 Execution
 ----------------------------------------------
