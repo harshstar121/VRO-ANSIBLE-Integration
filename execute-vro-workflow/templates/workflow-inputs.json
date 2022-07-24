@@ -1,0 +1,14 @@
+{
+	"parameters": [
+		{
+			"value": {
+				"string": {
+					"value": "{{ wf_yourName }}"
+				}
+			},
+			"type": "string",
+			"name": "yourName",
+			"scope": "local"
+		}
+	]
+}

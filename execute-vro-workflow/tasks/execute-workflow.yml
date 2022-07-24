@@ -1,0 +1,65 @@
+---
+- name: Send POST request to execute the workflow
+
+  vars:
+    wf_yourName: "{{ yourName }}"
+
+  block:
+    - set_fact:
+        workflow_url: "{{ vro_server_url + 'workflows/' + vro_workflow_id + '/executions'}}"
+
+    - name: Execution started
+      uri:
+        url: "{{ workflow_url }}"
+        user: "{{ vro_server_user }}"
+        password: "{{ vro_server_pwd }}"
+        status_code: 202
+        body: "{{ lookup('template', '{{ role_path }}/templates/workflow-inputs.json') }}" #input for the workflow
+        body_format: json
+        method: POST
+        force_basic_auth: yes
+        validate_certs: no
+        return_content: yes
+        timeout: 400
+      register: response
+      no_log: true # to prevent logging of user credentials
+
+    - name: Save workflow token
+      set_fact:
+        workflow_token: "{{ response.json.id }}"
+
+    - debug:
+        msg: "Current workflow token {{ workflow_token }}"
+
+    # continuosly checking for execution status
+    - name: Wait for workflow to finish
+      uri:
+        url: "{{ workflow_url + '/' + workflow_token }}"
+        user: "{{ vro_server_user }}"
+        password: "{{ vro_server_pwd }}"
+        status_code: 200
+        method: GET
+        force_basic_auth: yes
+        validate_certs: no
+        return_content: yes
+        timeout: 400
+      register: response
+      until: (response.json.state == "completed") or (response.json.state == "failed") or (response.json.state == "cancelled")
+      retries: 10 # number of times to retry
+      delay: 60 # in seconds
+
+    - name: Last execution status
+      debug:
+        msg: "Workflow Status : {{ response.json.state }}"
+
+    - name: failed the ansible job if something wrong
+      fail:
+        msg:
+          - "Workflow Status : {{ response.json.state }}"
+          - "Error: {{ response.json['content-exception'] }}"
+      when: (response.json.state == "failed")
+
+    - name: failed the ansible job if something wrong
+      fail:
+        msg: "Workflow execution is cancelled by user."
+      when: (response.json.state == "cancelled")

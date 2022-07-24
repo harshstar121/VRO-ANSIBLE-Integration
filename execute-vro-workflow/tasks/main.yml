@@ -1,0 +1,8 @@
+---
+- name: Execute Workflow on VRO
+  block:
+    - name: Check if workflow exist
+      include_tasks: ./check-workflow.yml
+
+    - name: Execute the workflow
+      include_tasks: ./execute-workflow.yml

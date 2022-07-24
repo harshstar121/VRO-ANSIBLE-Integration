@@ -1,0 +1,25 @@
+---
+- name: Send GET request to check if workflow exist
+  block:
+    - name: setting the parameters for api
+      set_fact:
+        workflow_url: "{{ vro_server_url + 'workflows/' + vro_workflow_id }}"
+
+    - name: Checking workflow
+      uri:
+        url: "{{ workflow_url }}"
+        user: "{{ vro_server_user }}"
+        password: "{{ vro_server_pwd }}"
+        status_code: 200
+        method: GET
+        force_basic_auth: yes
+        validate_certs: no
+        return_content: yes
+        timeout: 400
+      register: response
+      no_log: true # to prevent logging of user credentials
+
+    # succesful when the workflow found
+    - name: Get Ouput from response
+      debug:
+        msg: "Found the workflow with name {{ response.json.name }}"

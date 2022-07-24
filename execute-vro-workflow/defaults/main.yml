@@ -1,0 +1,5 @@
+---
+vro_server_url      : 'https://<FQDN>:8281/vco/api/'
+vro_workflow_id     : '<workflow_id_to_run>'
+vro_server_user     : '<user_to_execute_REST_api>' 
+vro_server_pwd      : '<password_for_the_account>'
